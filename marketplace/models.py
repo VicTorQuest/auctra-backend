@@ -33,7 +33,8 @@ class Profile(models.Model):
     # Farcaster & appearance
     farcaster_fid = models.CharField(max_length=128, blank=True, null=True)
     bio = models.TextField(blank=True)
-    avatar_url = models.URLField(blank=True, null=True)
+    avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
+    # avatar_url = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -169,12 +170,27 @@ class Escrow(models.Model):
 
 
 class EscrowEvent(models.Model):
+    EVENT_TYPES = [
+        ("payment_secured", "Payment Secured"),
+        ("item_shipped", "Item Shipped"),
+        ("delivered", "Item Delivered"),
+        ("released", "Funds Released"),
+        ("refunded", "Funds Refunded"),
+        ("dispute_opened", "Dispute Opened"),
+        ("dispute_resolved", "Dispute Resolved"),
+    ]
+
+
     escrow = models.ForeignKey(Escrow, on_delete=models.CASCADE, related_name="events")
-    event_type = models.CharField(max_length=64)
+    event_type = models.CharField(max_length=50, choices=EVENT_TYPES, default="payment_secured")
     tx_hash = models.CharField(max_length=100, blank=True, null=True)
     block_number = models.PositiveBigIntegerField(blank=True, null=True)
     payload = models.JSONField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.get_event_type_display()} - Escrow #{self.escrow.id}"
 
 
 # -------------------
@@ -192,3 +208,7 @@ class Dispute(models.Model):
     )
     resolved_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return self.escrow
