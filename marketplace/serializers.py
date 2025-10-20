@@ -1,91 +1,11 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from drf_spectacular.utils import extend_schema_serializer, extend_schema_field, OpenApiExample
-from.models import Listing, ListingImage, Order, Profile, Escrow, EscrowEvent, Dispute
+from drf_spectacular.utils import extend_schema_serializer, OpenApiExample
+from.models import Listing, ListingImage, Order, Escrow, EscrowEvent, Dispute
+from accounts.serializers import UserSerializer
 
 
 User = get_user_model()
-
-
-@extend_schema_serializer(
-    examples=[
-        OpenApiExample(
-            'Example Profile',
-            summary='User profile example',
-            description='Contains extended seller/buyer information for a user.',
-            value={
-                "wallet_address": "0xabc123...789",
-                "category": "gadgets",
-                "location_city": "Lagos",
-                "location_country": "Nigeria",
-                "description": "Trusted gadget reseller.",
-                "farcaster_fid": "johndoe.eth",
-                "bio": "Web3 trader and marketplace builder.",
-                "avatar": "https://example.com/media/avatars/user1.png",
-                "is_seller": True,
-                "created_at": "2025-10-11T15:24:30Z",
-            },
-        )
-    ]
-)
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = [
-            "wallet_address",
-            "category",
-            "location_city",
-            "location_country",
-            "description",
-            "farcaster_fid",
-            "bio",
-            "avatar",
-            "is_seller",
-            "created_at",
-        ]
-
-
-@extend_schema_serializer(
-    examples=[
-        OpenApiExample(
-            'Example User',
-            summary='User with profile data',
-            value={
-                "id": 7,
-                "username": "johndoe",
-                "email": "johndoe@example.com",
-                "first_name": "John",
-                "last_name": "Doe",
-                "profile": {
-                    "wallet_address": "0xabc123...789",
-                    "category": "gadgets",
-                    "location_city": "Lagos",
-                    "location_country": "Nigeria",
-                    "description": "Trusted gadget reseller.",
-                    "farcaster_fid": "vicquest.eth",
-                    "bio": "Web3 trader and marketplace builder.",
-                    "avatar": "https://example.com/media/avatars/user1.png",
-                    "is_seller": True,
-                    "created_at": "2025-10-11T15:24:30Z",
-                },
-            },
-        )
-    ]
-)
-class UserSerializer(serializers.ModelSerializer):
-    profile = ProfileSerializer(read_only=True)
-
-
-    class Meta:
-        model = User
-        fields = [
-            "id",
-            "username",
-            "email",
-            "first_name",
-            "last_name",
-            "profile",
-        ]
 
 
 
