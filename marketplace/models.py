@@ -161,10 +161,15 @@ class EscrowEvent(models.Model):
 # DISPUTES
 # -------------------
 class Dispute(models.Model):
+    DISPUTE_STATUS = (
+        ("dispute_opened", "Dispute Opened"), 
+        ("dispute_resolved", "Dispute Resolved")
+    )
     escrow = models.OneToOneField(Escrow, on_delete=models.CASCADE, related_name="dispute")
     raised_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     reason = models.TextField()
     evidence = models.JSONField(blank=True, null=True)
+    status = models.CharField(max_length=20, default="dispute_opened", choices=DISPUTE_STATUS)
     is_resolved = models.BooleanField(default=False)
     resolution_note = models.TextField(blank=True, null=True)
     resolved_by = models.ForeignKey(

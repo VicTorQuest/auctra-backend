@@ -80,7 +80,7 @@ class ListingSerializer(serializers.ModelSerializer):
             "description",
             "price",
             "category",
-            "image",
+            "images",
             "created_at",
             "updated_at",
         ]
@@ -290,8 +290,7 @@ class EscrowSerializer(serializers.ModelSerializer):
             name="Create Dispute Example",
             summary="Example payload for creating a dispute",
             description=(
-                "A buyer raises a dispute related to a specific escrow transaction "
-                "if the item was not delivered or arrived damaged."
+                "A buyer raises a dispute related to a specific escrow transaction, if the item was not delivered or arrived damaged."
             ),
             value={
                 "escrow": 12,
@@ -342,7 +341,7 @@ class DisputeSerializer(serializers.ModelSerializer):
             "buyer",
             "order",
             "reason",
-            "description",
+            # "description",
             "status",
             "created_at",
             "resolved_at",

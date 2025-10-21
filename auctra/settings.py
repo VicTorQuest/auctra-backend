@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # third part apps
     'rest_framework',
     'rest_framework_simplejwt',
+    "rest_framework_simplejwt.token_blacklist",
     'drf_spectacular',
     'drf_spectacular_sidecar',
 
@@ -118,9 +119,25 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
+}
+
+SIMPLE_JWT = {
+    "BLACKLIST_AFTER_ROTATION": True,
+    "ROTATE_REFRESH_TOKENS": True,
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Auctra API',
+    'DESCRIPTION': 'API documentation for your Auctra escrow marketplace.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,  # improves performance in Swagger UI
+    'COMPONENT_SPLIT_REQUEST': True,  # shows clear request/response examples
+    # 'SCHEMA_PATH_PREFIX': '/api/v1',  # optional if you version your APIs
 }
 
 
@@ -149,3 +166,17 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+FRONTEND_URL = os.getenv('FRONTEND_URL')
+
+
+# MY EMAIL SETTING
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+APPLICATION_EMAIL = os.environ.get('APPLICATION_EMAIL')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')

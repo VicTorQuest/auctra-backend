@@ -14,7 +14,7 @@ User = get_user_model()
         OpenApiExample(
             "Example Registration Request",
             summary="Register a new user",
-            description="Creates a new user account with username, name, email, and password.",
+            description="Creates a new user account with username, first and last name, email, and password.",
             value={
                 "username": "johndoe",
                 "email": "john@example.com",
@@ -217,13 +217,6 @@ class UserSerializer(serializers.ModelSerializer):
 )
 class PasswordResetRequestSerializer(serializers.Serializer):
     email = serializers.EmailField()
-
-    # def validate_email(self, value):
-    #     try:
-    #         User.objects.get(email=value)
-    #     except ObjectDoesNotExist:
-    #         raise serializers.ValidationError("No user found with this email.")
-    #     return value
 
 
 @extend_schema_serializer(
